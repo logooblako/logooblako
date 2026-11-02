@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block main %}
+<section class="hero">
+  <div class="blob" style="width:420px;height:420px;background:#ffe1d6;left:-140px;top:-120px"></div>
+  <div class="blob" style="width:360px;height:360px;background:#d9f5ee;right:-120px;top:40px"></div>
+  <div class="wrap">
+    <div>
+      <h1>Говорим красиво — играя каждый день</h1>
+      <p>Задания для автоматизации и различения звуков, советы родителям по развитию речи, игры, книги и пальчиковые стихи. Всё можно открыть на телефоне или распечатать.</p>
+      <div class="btns">
+        <a class="btn main" href="{{ root }}zvuki/index.html">Выбрать звук</a>
+        <a class="btn soft" href="{{ root }}urovni/index.html">Советы родителям</a>
+      </div>
+    </div>
+    <img class="sheep" src="{{ root }}assets/img/cloud.svg" alt="Логооблако">
+  </div>
+</section>
+<section class="section"><div class="wrap">
+  <div class="grid">
+    {% for href, ico, bg, t, d in [
+      ("zvuki/index.html","🔤","#d9f5ee","Автоматизация звуков","Слоги, слова с картинками, чистоговорки и листы для печати по каждому звуку."),
+      ("differentsiatsiya/index.html","⚖️","#ffe1d6","Различаем звуки","Пары звуков, которые дети путают: игры «разложи по домикам» и пары слов."),
+      ("urovni/index.html","🌱","#e6efff","Уровни речи","Как говорить с ребёнком, как построить день и куда сходить — по уровням речевого развития."),
+      ("motorika/index.html","✋","#fff1c9","Мелкая моторика","Пальчиковые игры, стихи с движениями, рисование, ножницы и лепка от 1 до 10 лет."),
+      ("poznanie/index.html","🧸","#f1ecff","Познание 0–3","Развитие познавательной активности малышей по возрастам."),
+      ("chitat/index.html","📚","#ffe6ef","Почитать и посмотреть","Книги, мультфильмы, спектакли и места для детей от 3 до 15 лет."),
+      ("igry/index.html","🎲","#e3f7ff","Игры","Онлайн-игры и презентации, собранные логопедом."),
+      ("skazki/index.html","🌙","#efe9ff","Терапевтические сказки","Сказки, которые помогают ребёнку справиться с трудными чувствами.")] %}
+    <a class="card" href="{{ root }}{{ href }}"><div class="ico" style="background:{{ bg }}">{{ ico }}</div><h3>{{ t }}</h3><p class="muted">{{ d }}</p></a>
+    {% endfor %}
+  </div>
+</div></section>
+<section class="section"><div class="wrap two">
+  <div class="card"><h3>Как заниматься дома</h3>
+    <ul class="nice"><li>Коротко и каждый день: 5–15 минут.</li><li>Играйте, а не проверяйте: хвалите за старание.</li><li>Автоматизировать звук можно только после того, как его поставил логопед.</li></ul></div>
+  <div class="card"><h3>Популярные звуки</h3>
+    <div class="bubbles">{% for s in sounds[:16] %}<a class="bub g-{{ s.group }}" href="{{ root }}zvuki/{{ s.slug }}/index.html">{{ s.letter }}</a>{% endfor %}</div></div>
+</div></section>
+{% endblock %}

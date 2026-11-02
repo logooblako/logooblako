@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Терапевтические сказки{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  {% if tales %}
+  <div class="grid" style="margin-top:20px">
+    {% for t in tales %}<a class="card" href="{{ root }}skazki/{{ t.slug }}/index.html">
+      {% if t.cover %}<img src="{{ u(t.cover) }}" alt="" style="border-radius:16px;aspect-ratio:4/3;object-fit:cover;width:100%">{% else %}<div class="ico" style="background:#efe9ff">🌙</div>{% endif %}
+      <h3>{{ t.title }}</h3>{% if t.helps %}<p class="muted">Помогает: {{ t.helps }}</p>{% endif %}
+      {% if t.age %}<span class="tag">{{ t.age }}</span>{% endif %}</a>{% endfor %}
+  </div>
+  {% else %}<div class="note" style="margin-top:18px">Сказки скоро появятся.</div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ t.title }}{% endblock %}
+{% block main %}
+<div class="wrap section" style="max-width:820px">
+  <div class="crumbs"><a href="{{ root }}skazki/index.html">← Все сказки</a></div>
+  <h1>{{ t.title }}</h1>
+  <p>{% if t.age %}<span class="tag">{{ t.age }}</span>{% endif %}{% if t.helps %}<span class="tag new">Помогает: {{ t.helps }}</span>{% endif %}</p>
+  {% if t.cover %}<img src="{{ u(t.cover) }}" alt="" style="border-radius:22px;width:100%;margin:10px 0">{% endif %}
+  {% if t.audio %}<audio controls src="{{ u(t.audio) }}" style="width:100%;margin:10px 0"></audio>{% endif %}
+  {% if t.video %}<video controls src="{{ u(t.video) }}" style="width:100%;border-radius:18px;margin:10px 0"></video>{% endif %}
+  <div class="card prose" style="font-size:19px;line-height:1.7">{{ t.body_html | safe }}</div>
+  {% if t.questions %}<div class="section"><h2>Обсудите с ребёнком</h2><ul class="nice">{% for q in t.questions %}<li>{{ q }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if t.files %}<div class="files">{% for f in t.files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">FILE</span>{{ f.title }}</a>{% endfor %}</div>{% endif %}
+  {% if t.source %}<p class="muted" style="margin-top:14px">Источник: {% if t.source.startswith('http') %}<a href="{{ t.source }}">{{ t.source }}</a>{% else %}{{ t.source }}{% endif %}</p>{% endif %}
+</div>
+{% endblock %}

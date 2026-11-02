@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Конструктор игр{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <div class="crumbs"><a href="{{ root }}igry/index.html">← Все игры</a></div>
+  <h1>Конструктор игр</h1>
+  <p class="muted">Выберите шаблон, добавьте карточки — справа сразу появится готовая игра. Её можно сохранить в «Мои игры», отправить родителям ссылкой или скачать файлом.</p>
+
+  <div class="builder">
+    <div class="card">
+      <label class="lbl">Название игры<input id="b-title" class="inp" placeholder="Например: Где звук [С]?"></label>
+      <label class="lbl">Шаблон
+        <select id="b-tpl" class="inp">
+          <option value="quiz">❓ Викторина — вопрос и варианты ответа</option>
+          <option value="pairs">🃏 Найди пару — открываем карточки</option>
+          <option value="sort">🏠 Разложи по группам</option>
+          <option value="wheel">🎡 Колесо — случайная карточка</option>
+          <option value="flip">🔄 Переверни карточку</option>
+          <option value="slides">🖼️ Презентация — слайды</option>
+        </select></label>
+      <p class="hint" id="b-hint"></p>
+      <label class="lbl" id="b-groups-wrap">Группы через запятую<input id="b-groups" class="inp" placeholder="С, Ш"></label>
+      <h3 style="margin-top:14px">Карточки</h3>
+      <div id="b-cards"></div>
+      <button class="btn soft" id="b-add">＋ Добавить карточку</button>
+      <div class="btns">
+        <button class="btn main" id="b-save">💾 Сохранить в «Мои игры»</button>
+        <button class="btn soft" id="b-link">🔗 Ссылка для родителей</button>
+        <button class="btn soft" id="b-down">⬇️ Скачать файл</button>
+        <label class="btn soft" style="cursor:pointer">⬆️ Открыть файл<input type="file" id="b-up" accept=".json" hidden></label>
+        <button class="btn soft" id="b-new">Новая игра</button>
+      </div>
+      <p class="muted" id="b-msg" style="min-height:1.5em"></p>
+    </div>
+    <div>
+      <h3>Как будет выглядеть</h3>
+      <div class="game" id="b-preview"></div>
+    </div>
+  </div>
+
+  <div class="section"><h2>Мои игры</h2><p class="muted">Хранятся в этом браузере. Чтобы игра была видна всем на странице «Игры», добавьте её через панель управления сайтом.</p><div class="grid" id="b-mine"></div></div>
+
+  <dialog id="b-picker" class="picker"><div class="pk-head"><input id="pk-q" class="inp" placeholder="Найти картинку: кот, мяч…"><button class="btn soft" id="pk-close">✕</button></div>
+    <div class="pics" id="pk-list"></div>
+    <label class="btn soft" style="margin-top:12px;cursor:pointer">📷 Загрузить своё фото<input type="file" id="pk-file" accept="image/*" hidden></label>
+  </dialog>
+</div>
+{% endblock %}
+{% block scripts %}<script>window.PICS = {{ pics | safe }}; window.ROOT = "{{ root }}";</script><script src="{{ root }}assets/js/builder.js"></script>{% endblock %}

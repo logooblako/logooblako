@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ s.title }}{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <div class="crumbs"><a href="{{ root }}zvuki/index.html">← Все звуки</a></div>
+  <div class="bubbles" style="margin-top:12px">
+    {% for g, items in groups %}{% for x in items %}<a class="bub g-{{ x.group }} {{ 'on' if x.slug == s.slug else '' }}" href="{{ root }}zvuki/{{ x.slug }}/index.html">{{ x.letter }}</a>{% endfor %}{% endfor %}
+  </div>
+  <div class="pagehead"><div class="bigletter g-{{ s.group }}" style="background:var(--c)">{{ s.letter }}</div>
+    <div><h1>{{ s.title }}</h1><div class="muted">{{ s.group }} звуки</div></div></div>
+
+  <div class="two" style="margin-top:18px">
+    <div class="card"><h3>Как произносится</h3><p>{{ s.articulation }}</p></div>
+    <div class="card prose"><h3>Как заниматься</h3>{{ s.body_html | safe }}</div>
+  </div>
+
+  {% if s.audios %}<div class="section"><h2>Послушать</h2><div class="grid">{% for f in s.audios %}<div class="card"><b>{{ f.title }}</b><audio controls preload="none" src="{{ u(f.file) }}" style="width:100%;margin-top:8px"></audio></div>{% endfor %}</div></div>{% endif %}
+  <div class="section"><h2>Шаг 1. Слоги</h2>
+    {% for line in (s.syllables or '').split('\n') if line.strip() %}<div class="chips" style="margin:6px 0">{% for x in line.split('-') %}<span class="chip">{{ x }}</span>{% endfor %}</div>{% endfor %}
+  </div>
+
+  <div class="section"><h2>Шаг 2. Слова</h2>
+    <p class="muted">Ребёнок называет картинку, вы нажимаете на неё, если звук прозвучал правильно.</p>
+    <div class="tabs" data-tabs>
+      {% if s.words_start %}<button class="tab on" data-tab="w1">Звук в начале</button>{% endif %}
+      {% if s.words_middle %}<button class="tab {{ '' if s.words_start else 'on' }}" data-tab="w2">В середине</button>{% endif %}
+      {% if s.words_end %}<button class="tab" data-tab="w3">В конце</button>{% endif %}
+    </div>
+    {% for key, list in [("w1", s.words_start), ("w2", s.words_middle), ("w3", s.words_end)] %}{% if list %}
+    <div class="panel {{ 'on' if (key=='w1') or (key=='w2' and not s.words_start) else '' }}" data-panel="{{ key }}"><div class="pics">
+      {% for w in list %}<div class="pic" data-toggle>{% if w.pic %}<img src="{{ u(w.pic) }}" alt="">{% endif %}<b>{{ w.word }}</b></div>{% endfor %}
+    </div></div>{% endif %}{% endfor %}
+    {% if s.extra_words %}<p style="margin-top:14px"><b>Ещё слова:</b> {{ s.extra_words }}</p>{% endif %}
+  </div>
+
+  {% if s.all_words %}
+  <div class="section"><h2>Игра «Назови картинку»</h2>
+    <div class="game" data-namegame='{{ game }}' data-root="{{ root }}">
+      <div class="stars" aria-live="polite"></div>
+      <div class="stage"><img alt=""></div>
+      <div class="word"></div>
+      <div class="btns" style="justify-content:center">
+        <button class="btn soft" data-hint>Подсказка</button>
+        <button class="btn main" data-ok>Сказал правильно ⭐</button>
+        <button class="btn soft" data-next>Дальше →</button>
+      </div>
+    </div>
+  </div>{% endif %}
+
+  <div class="section two">
+    {% if s.phrases %}<div><h2>Шаг 3. Словосочетания</h2><ul class="nice">{% for x in s.phrases %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if s.sentences %}<div><h2>Шаг 4. Предложения</h2><ul class="nice">{% for x in s.sentences %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+  <div class="section two">
+    {% if s.chistogovorki %}<div><h2>Чистоговорки</h2><ul class="nice" style="--c:var(--mint)">{% for x in s.chistogovorki %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if s.skorogovorki %}<div><h2>Скороговорки</h2><ul class="nice" style="--c:var(--lav)">{% for x in s.skorogovorki %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+
+  <div class="section"><h2>Скачать и распечатать</h2>
+    <div class="files">
+      {% for f in (s.auto_files or []) + (s.files or []) %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

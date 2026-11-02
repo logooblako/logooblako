@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Страница не найдена{% endblock %}
+{% block main %}
+<div class="wrap section" style="text-align:center">
+  <img src="{{ root }}assets/img/cloud.svg" alt="" style="width:200px">
+  <h1>Ой, такой страницы нет</h1>
+  <p class="muted">Облачко поискало везде — не нашло. Вернёмся на главную?</p>
+  <a class="btn main" href="{{ root }}index.html">На главную</a>
+</div>
+{% endblock %}

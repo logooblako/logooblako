@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ g.title }}{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <div class="crumbs"><a href="{{ root }}igry/index.html">← Все игры</a></div>
+  <h1>{{ g.title }}</h1>
+  {% if g.description %}<p class="muted">{{ g.description }}</p>{% endif %}
+  <div class="game" id="game-player" data-game='{{ data }}' data-root="{{ root }}"{% if shared %} data-shared="1"{% endif %}></div>
+  {% if g.body_html %}<div class="card prose" style="margin-top:18px">{{ g.body_html | safe }}</div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Об авторе{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <div class="profile card">
+    {% if a.photo %}<img class="avatar" src="{{ u(a.photo) }}" alt="{{ a.name }}">{% else %}<div class="avatar"><img src="{{ root }}assets/img/cloud.svg" alt="" style="width:90px"></div>{% endif %}
+    <div><h1 style="margin:0">{{ a.name }}</h1><p class="muted" style="font-size:20px;margin:4px 0">{{ a.role }}</p>
+      <div class="prose">{{ a.body_html | safe }}</div></div>
+  </div>
+
+  {% if a.products %}<div class="section"><h2>Авторские пособия и игры</h2>
+    <div class="grid">{% for p in a.products %}<div class="card prod">
+      {% if p.image %}<img src="{{ u(p.image) }}" alt="" style="border-radius:14px">{% endif %}
+      <h3>{{ p.title }}</h3><div class="muted">{{ p.publisher }}</div>{% if p.isbn %}<div class="muted" style="font-size:14px">ISBN {{ p.isbn }}</div>{% endif %}
+      {% if p.link %}<a class="btn main" href="{{ p.link }}" target="_blank" rel="noopener">Где купить</a>{% endif %}
+    </div>{% endfor %}</div></div>{% endif %}
+
+  {% for key, title in [("education","Образование и обучение"),("diplomas","Дипломы и сертификаты"),("talks","Выступления и публикации"),("awards","Награды")] %}
+    {% if a[key] %}<div class="section"><h2>{{ title }}</h2><ul class="nice">
+      {% for x in a[key] %}<li>{% if x is mapping %}<b>{{ x.year }}</b> {{ x.title }}{% if x.file %} — <a href="{{ u(x.file) }}">документ</a>{% endif %}{% else %}{{ x }}{% endif %}</li>{% endfor %}
+    </ul></div>{% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

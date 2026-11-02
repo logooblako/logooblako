@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Что почитать и посмотреть{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  {% for a in ages %}
+  <details class="age" {{ 'open' if loop.first else '' }}>
+    <summary><span class="ico" style="width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:{{ ['#d9f5ee','#ffe1d6','#e6efff','#fff1c9','#f1ecff','#ffe6ef'][loop.index0 % 6] }}">📖</span>{{ a.title }}</summary>
+    <div class="inner">
+      <p>{{ a.about }}</p>
+      <h3>📍 Куда сходить</h3><ul class="nice" style="--c:var(--sky)">{% for x in a.places or [] %}<li>{{ x }}</li>{% endfor %}</ul>
+      <h3 style="margin-top:18px">📚 Книги</h3>
+      {% for b in a.books or [] %}<div class="item"><b>{{ b.title }}</b> <span class="muted">— {{ b.author }}</span>
+        <span class="tag {{ 'new' if 'современ' in (b.kind or '') else '' }}">{{ b.kind }}</span><br><span class="muted">Что даёт: </span>{{ b.develops }}</div>{% endfor %}
+      <h3 style="margin-top:18px">🎬 Мультфильмы, фильмы, спектакли</h3>
+      {% for f in a.films or [] %}<div class="item"><b>{{ f.title }}</b> <span class="muted">— {{ f.info }}</span><br><span class="muted">Что даёт: </span>{{ f.gives }}</div>{% endfor %}
+    </div>
+  </details>
+  {% endfor %}
+</div>
+{% endblock %}

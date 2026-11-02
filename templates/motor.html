@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Мелкая моторика{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  <div class="tabs" data-tabs data-hash style="margin-top:20px">
+    {% for a in ages %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="age-{{ a.slug }}">{{ a.title }}</button>{% endfor %}
+  </div>
+  {% for a in ages %}
+  <div class="panel {{ 'on' if loop.first else '' }}" data-panel="age-{{ a.slug }}">
+    <h2>{{ a.title }}</h2>
+    <p>{{ a.about }}</p>
+    <h3>Стихи с движениями</h3>
+    <div class="grid">{% for r in a.rhymes or [] %}<div class="card"><h3>{{ r.title }}</h3><p style="font-size:19px"><i>{{ r.text }}</i></p><p class="muted"><b>Движения:</b> {{ r.moves }}</p>{% if r.audio %}<audio controls preload="none" src="{{ u(r.audio) }}" style="width:100%"></audio>{% endif %}{% if r.source %}<span class="tag">{{ r.source }}</span>{% endif %}</div>{% endfor %}</div>
+    <div class="section two">
+      <div><h3>🎨 Рисование</h3><ul class="nice" style="--c:var(--sky)">{% for x in a.drawing or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div><h3>📄 Бумага и аппликация</h3><ul class="nice" style="--c:var(--mint)">{% for x in a.applique or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div><h3>✂️ Ножницы</h3><ul class="nice" style="--c:var(--coral)">{% for x in a.scissors or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div><h3>🟠 Пластилин и лепка</h3><ul class="nice" style="--c:var(--sun)">{% for x in a.plasticine or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+    </div>
+    {% if a.materials %}<div class="card"><h3>Что понадобится</h3><div class="chips">{% for x in a.materials %}<span class="chip">{{ x }}</span>{% endfor %}</div></div>{% endif %}
+    {% if a.files %}<div class="files" style="margin-top:14px">{% for f in a.files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div>{% endif %}
+  </div>
+  {% endfor %}
+  <div class="section"><h2>Листы для печати</h2><div class="files">{% for f in files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div></div>
+</div>
+{% endblock %}

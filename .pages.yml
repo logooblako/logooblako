@@ -1,0 +1,279 @@
+# Панель редактирования сайта: https://app.pagescms.org (вход через GitHub)
+media:
+  - name: pics
+    label: Картинки для слов
+    input: assets/pics
+    output: /assets/pics
+    extensions: [svg, png, jpg, jpeg, webp]
+  - name: files
+    label: Файлы и фото
+    input: media
+    output: /media
+
+components:
+  word:
+    type: object
+    label: Слово
+    fields:
+      - { name: word, label: Слово, type: string }
+      - { name: pic, label: Картинка, type: image, options: { media: pics } }
+  file:
+    type: object
+    label: Файл
+    fields:
+      - { name: title, label: Название, type: string }
+      - { name: file, label: Файл, type: file, options: { media: files } }
+
+content:
+  - name: site
+    label: "⚙️ Настройки сайта"
+    type: file
+    path: data/site.md
+    fields:
+      - { name: site_name, label: Название сайта, type: string }
+      - { name: tagline, label: Подзаголовок, type: string }
+      - { name: author, label: Автор, type: string }
+      - { name: email, label: Почта для связи, type: string }
+      - { name: site_url, label: "Адрес сайта (https://...)", type: string }
+      - { name: feedback_post, label: "Пост Telegram для чата отзывов (имя_канала/номер_поста)", type: string }
+      - { name: footer_note, label: Примечание в подвале, type: text }
+
+  - name: sounds
+    label: "🔤 Звуки (автоматизация)"
+    type: collection
+    path: content/sounds
+    view: { primary: title, fields: [title, group] }
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: letter, label: Буква на кнопке, type: string }
+      - { name: group, label: Группа, type: select, options: { values: [Свистящие, Шипящие, Сонорные, Заднеязычные] } }
+      - { name: order, label: Порядок, type: number }
+      - { name: articulation, label: Как произносится, type: text }
+      - { name: syllables, label: "Слоги (каждый ряд с новой строки, слоги через дефис)", type: text }
+      - { name: words_start, label: Слова — звук в начале, component: word, list: true }
+      - { name: words_middle, label: Слова — звук в середине, component: word, list: true }
+      - { name: words_end, label: Слова — звук в конце, component: word, list: true }
+      - { name: extra_words, label: Ещё слова (без картинок), type: text }
+      - { name: phrases, label: Словосочетания, type: string, list: true }
+      - { name: sentences, label: Предложения, type: string, list: true }
+      - { name: chistogovorki, label: Чистоговорки, type: string, list: true }
+      - { name: skorogovorki, label: Скороговорки, type: string, list: true }
+      - { name: audios, label: Аудио для прослушивания, component: file, list: true }
+      - { name: files, label: Дополнительные файлы для скачивания, component: file, list: true }
+      - { name: body, label: Текст «Как заниматься», type: rich-text }
+
+  - name: diffs
+    label: "⚖️ Различаем звуки"
+    type: collection
+    path: content/diffs
+    view: { primary: title }
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: sound_a, label: Первый звук, type: string }
+      - { name: sound_b, label: Второй звук, type: string }
+      - { name: words_a, label: Слова с первым звуком, component: word, list: true }
+      - { name: words_b, label: Слова со вторым звуком, component: word, list: true }
+      - { name: syllable_pairs, label: Слоговые ряды, type: string, list: true }
+      - name: word_pairs
+        label: Пары слов
+        type: object
+        list: true
+        fields:
+          - { name: a, label: Слово 1, type: string }
+          - { name: b, label: Слово 2, type: string }
+      - { name: sentences, label: Предложения, type: string, list: true }
+      - { name: skorogovorki, label: Скороговорки, type: string, list: true }
+      - { name: files, label: Дополнительные файлы, component: file, list: true }
+      - { name: body, label: Текст, type: rich-text }
+
+  - name: levels
+    label: "🌱 Уровни речи"
+    type: collection
+    path: content/levels
+    view: { primary: title }
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: subtitle, label: Подзаголовок, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: who, label: Как говорит ребёнок, type: text }
+      - { name: talk, label: Как разговаривать, type: text, list: true }
+      - { name: home, label: Домашний день, type: text, list: true }
+      - { name: places, label: Куда сходить, type: text, list: true }
+      - { name: tales, label: Сказки и стихи, type: string, list: true }
+      - { name: books, label: Литература для родителей, type: text, list: true }
+      - { name: apps, label: Приложения, type: text, list: true }
+      - { name: apps_note, label: Примечание о приложениях, type: text }
+      - { name: files, label: Файлы, component: file, list: true }
+
+  - name: motor
+    label: "✋ Мелкая моторика"
+    type: collection
+    path: content/motor
+    view: { primary: title }
+    fields:
+      - { name: title, label: Возраст, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: about, label: Описание, type: text }
+      - name: rhymes
+        label: Стихи с движениями
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название, type: string }
+          - { name: text, label: Текст, type: text }
+          - { name: moves, label: Движения, type: text }
+          - { name: source, label: Источник, type: string }
+          - { name: audio, label: Аудио, type: file, options: { media: files } }
+      - { name: drawing, label: Рисование, type: text, list: true }
+      - { name: applique, label: Бумага и аппликация, type: text, list: true }
+      - { name: scissors, label: Ножницы, type: text, list: true }
+      - { name: plasticine, label: Пластилин и лепка, type: text, list: true }
+      - { name: materials, label: Что понадобится, type: string, list: true }
+      - { name: files, label: Файлы, component: file, list: true }
+
+  - name: cognition
+    label: "🧸 Познание 0–3"
+    type: collection
+    path: content/cognition
+    view: { primary: title }
+    fields:
+      - { name: title, label: Возраст, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: ready, label: Показывать на сайте, type: boolean }
+      - { name: what_develops, label: Что развивается, type: text, list: true }
+      - { name: games, label: Во что играть, type: text, list: true }
+      - { name: watch, label: На что обратить внимание, type: text, list: true }
+      - { name: files, label: Файлы, component: file, list: true }
+      - { name: body, label: Дополнительный текст, type: rich-text }
+
+  - name: reading
+    label: "📚 Почитать и посмотреть"
+    type: collection
+    path: content/reading
+    view: { primary: title }
+    fields:
+      - { name: title, label: Возраст, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: about, label: Описание, type: text }
+      - { name: places, label: Куда сходить, type: text, list: true }
+      - name: books
+        label: Книги
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название, type: string }
+          - { name: author, label: Автор, type: string }
+          - { name: kind, label: "классика / современная", type: string }
+          - { name: develops, label: Что развивает, type: text }
+      - name: films
+        label: Фильмы, мультфильмы, спектакли
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название, type: string }
+          - { name: info, label: Год, вид, type: string }
+          - { name: gives, label: Что даёт ребёнку, type: text }
+
+  - name: games
+    label: "🎲 Игры (конструктор)"
+    type: collection
+    path: content/games
+    view: { primary: title, fields: [title, template] }
+    fields:
+      - { name: title, label: Название игры, type: string }
+      - name: template
+        label: Шаблон
+        type: select
+        options:
+          values:
+            - { value: quiz, label: "Викторина: вопрос (текст) + правильный ответ (оборот) + неверные варианты через запятую" }
+            - { value: pairs, label: "Найди пару: одинаковые картинки или пара текст ↔ оборот" }
+            - { value: sort, label: "Разложи по группам: группы через запятую, у карточки — группа" }
+            - { value: wheel, label: "Колесо: случайная карточка" }
+            - { value: flip, label: "Переверни карточку: лицо (текст) и оборот" }
+            - { value: slides, label: "Презентация: заголовок (текст) и описание (оборот)" }
+      - { name: order, label: Порядок, type: number }
+      - { name: description, label: Описание, type: text }
+      - { name: groups, label: "Группы (для «Разложи по группам»), через запятую", type: string }
+      - name: cards
+        label: Карточки
+        type: object
+        list: true
+        fields:
+          - { name: text, label: Текст / вопрос / заголовок, type: string }
+          - { name: pic, label: Картинка, type: image, options: { media: pics } }
+          - { name: back, label: Оборот / правильный ответ / описание, type: text }
+          - { name: group, label: Группа, type: string }
+          - { name: options, label: Неверные варианты (через запятую), type: string }
+          - { name: audio, label: Аудио (mp3, m4a), type: file, options: { media: files } }
+      - { name: body, label: Подсказка для взрослого, type: rich-text }
+
+  - name: tales
+    label: "🌙 Терапевтические сказки"
+    type: collection
+    path: content/tales
+    view: { primary: title }
+    fields:
+      - { name: title, label: Название, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: age, label: Возраст, type: string }
+      - { name: helps, label: Чем помогает, type: string }
+      - { name: cover, label: Обложка, type: image, options: { media: files } }
+      - { name: audio, label: Аудио, type: file, options: { media: files } }
+      - { name: video, label: Видео, type: file, options: { media: files } }
+      - { name: questions, label: Вопросы для обсуждения, type: string, list: true }
+      - { name: source, label: Источник, type: string }
+      - { name: files, label: Файлы, component: file, list: true }
+      - { name: body, label: Текст сказки, type: rich-text }
+
+  - name: author
+    label: "👩 Об авторе"
+    type: file
+    path: content/author.md
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: name, label: ФИО, type: string }
+      - { name: role, label: Должность, type: string }
+      - { name: photo, label: Фото, type: image, options: { media: files } }
+      - name: products
+        label: Авторские продукты
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название, type: string }
+          - { name: publisher, label: Издательство, type: string }
+          - { name: isbn, label: ISBN, type: string }
+          - { name: link, label: Ссылка, type: string }
+          - { name: image, label: Обложка, type: image, options: { media: files } }
+      - name: education
+        label: Образование и обучение
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
+      - name: diplomas
+        label: Дипломы и сертификаты
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
+      - name: talks
+        label: Выступления и публикации
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
+      - name: awards
+        label: Награды
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
+      - { name: body, label: О себе, type: rich-text }
+
+  - name: pages
+    label: "📄 Вступительные тексты разделов"
+    type: collection
+    path: content/pages
+    view: { primary: title }
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: source, label: Источник (для раздела «Познание»), type: string }
+      - { name: body, label: Текст, type: rich-text }

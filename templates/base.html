@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}{{ site.site_name }}{% endblock %} — {{ site.site_name }}</title>
+<meta name="description" content="{{ site.tagline }}">
+<meta property="og:title" content="{{ self.title() }} — {{ site.site_name }}">
+<meta property="og:description" content="{{ site.tagline }}">
+<meta property="og:type" content="website">
+{% if site.site_url %}<meta property="og:image" content="{{ site.site_url }}/assets/img/og.png">{% endif %}
+<link rel="icon" href="{{ root }}assets/img/cloud.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ root }}assets/css/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="{{ root }}index.html"><img src="{{ root }}assets/img/cloud.svg" alt=""><span>{{ site.site_name }}</span></a>
+  <nav class="nav" aria-label="Разделы">
+    {% for key, href, label in [
+      ("zvuki","zvuki/index.html","Звуки"),
+      ("diff","differentsiatsiya/index.html","Различаем звуки"),
+      ("urovni","urovni/index.html","Уровни речи"),
+      ("motorika","motorika/index.html","Моторика"),
+      ("poznanie","poznanie/index.html","Познание 0–3"),
+      ("chitat","chitat/index.html","Почитать и посмотреть"),
+      ("igry","igry/index.html","Игры"),
+      ("skazki","skazki/index.html","Сказки"),
+      ("otzyvy","otzyvy/index.html","Отзывы"),
+      ("avtor","avtor/index.html","Об авторе")] %}
+      <a href="{{ root }}{{ href }}" class="{{ 'on' if nav == key else '' }}">{{ label }}</a>
+    {% endfor %}
+  </nav>
+</div></header>
+<main>{% block main %}{% endblock %}</main>
+<a class="fab" href="{{ root }}otzyvy/index.html">💬 Отзывы и вопросы</a>
+<footer><div class="wrap">
+  <div class="share"><b>Поделиться сайтом:</b>
+    <button class="btn soft" data-share>Отправить ссылку</button>
+    <a class="btn soft" data-share-to="tg" target="_blank" rel="noopener">Telegram</a>
+    <a class="btn soft" data-share-to="vk" target="_blank" rel="noopener">ВКонтакте</a>
+    <a class="btn soft" data-share-to="wa" target="_blank" rel="noopener">WhatsApp</a>
+    <span data-copied class="muted"></span></div>
+  <p><b>{{ site.site_name }}</b> — {{ site.tagline }}. Автор: {{ site.author }}.</p>
+  <p>{{ site.footer_note }}</p>
+  <p class="muted" style="color:#b9b8d6">Картинки: <a href="https://github.com/jdecked/twemoji">Twemoji</a>, лицензия <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>. Шрифт Nunito (SIL OFL).</p>
+</div></footer>
+<script src="{{ root }}assets/js/app.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

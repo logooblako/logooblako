@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Автоматизация звуков{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>Автоматизация звуков</h1>
+  <p class="muted">Выберите звук. На странице звука — как он произносится, слоги, слова с картинками, игра, чистоговорки и листы для печати.</p>
+  <div class="note">Автоматизировать можно только звук, который уже поставлен логопедом. Если ребёнок пока произносит звук неправильно, сначала покажите его специалисту.</div>
+  {% for g, items in groups %}
+    <div class="grouplabel">{{ g }}</div>
+    <div class="bubbles">{% for s in items %}<a class="bub g-{{ s.group }}" href="{{ root }}zvuki/{{ s.slug }}/index.html">{{ s.letter }}</a>{% endfor %}</div>
+  {% endfor %}
+</div>
+{% endblock %}

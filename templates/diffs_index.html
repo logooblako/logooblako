@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Различаем звуки{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>Различаем звуки</h1>
+  <p class="muted">Дифференциация — когда ребёнок умеет произносить оба звука, но путает их в словах. Выберите пару звуков.</p>
+  <div class="bubbles">{% for d in diffs %}<a class="bub" style="--c:var(--lav)" href="{{ root }}differentsiatsiya/{{ d.slug }}/index.html">{{ d.sound_a }}–{{ d.sound_b }}</a>{% endfor %}</div>
+</div>
+{% endblock %}

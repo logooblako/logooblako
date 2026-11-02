@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Различаем {{ d.title }}{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <div class="crumbs"><a href="{{ root }}differentsiatsiya/index.html">← Все пары звуков</a></div>
+  <div class="bubbles" style="margin-top:12px">{% for x in diffs %}<a class="bub {{ 'on' if x.slug == d.slug else '' }}" style="--c:var(--lav)" href="{{ root }}differentsiatsiya/{{ x.slug }}/index.html">{{ x.sound_a }}–{{ x.sound_b }}</a>{% endfor %}</div>
+  <h1>Различаем звуки {{ d.title }}</h1>
+  <div class="card prose">{{ d.body_html | safe }}</div>
+
+  {% if game != '[]' %}
+  <div class="section"><h2>Игра «Разложи по домикам»</h2>
+    <div class="game" data-sortgame='{{ game }}' data-root="{{ root }}">
+      <div class="stars" aria-live="polite"></div>
+      <div class="stage"><img alt=""></div>
+      <div class="word"></div>
+      <div class="houses">
+        <button class="house a" data-house="a">{{ d.sound_a }}<span>в этот домик</span></button>
+        <button class="house b" data-house="b">{{ d.sound_b }}<span>в этот домик</span></button>
+      </div>
+    </div>
+  </div>{% endif %}
+
+  <div class="section two">
+    <div class="card"><h3>Слова со звуком {{ d.sound_a }}</h3><div class="pics">{% for w in d.words_a or [] %}<div class="pic">{% if w.pic %}<img src="{{ u(w.pic) }}" alt="">{% endif %}<b>{{ w.word }}</b></div>{% endfor %}</div></div>
+    <div class="card"><h3>Слова со звуком {{ d.sound_b }}</h3><div class="pics">{% for w in d.words_b or [] %}<div class="pic">{% if w.pic %}<img src="{{ u(w.pic) }}" alt="">{% endif %}<b>{{ w.word }}</b></div>{% endfor %}</div></div>
+  </div>
+
+  <div class="section two">
+    <div><h2>Слоговые ряды</h2><div class="chips">{% for x in d.syllable_pairs or [] %}<span class="chip">{{ x }}</span>{% endfor %}</div></div>
+    {% if d.word_pairs %}<div><h2>Слова-«близнецы»</h2><p class="muted">Отличаются одним звуком. Покажите картинку или назовите пару и спросите: «Это одно и то же?»</p>
+      <ul class="nice">{% for x in d.word_pairs %}<li><b>{{ x.a }}</b> — <b>{{ x.b }}</b></li>{% endfor %}</ul></div>{% endif %}
+  </div>
+  <div class="section two">
+    {% if d.sentences %}<div><h2>Предложения</h2><ul class="nice">{% for x in d.sentences %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if d.skorogovorki %}<div><h2>Скороговорки</h2><ul class="nice" style="--c:var(--lav)">{% for x in d.skorogovorki %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+  <div class="section"><h2>Скачать и распечатать</h2>
+    <div class="files">{% for f in (d.auto_files or []) + (d.files or []) %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div>
+  </div>
+</div>
+{% endblock %}

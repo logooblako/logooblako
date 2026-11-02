@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Развитие познавательной активности{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}{% if intro.source %}<p class="muted">Источник: {{ intro.source }}</p>{% endif %}</div>
+  <div class="tabs" data-tabs data-hash style="margin-top:20px">
+    {% for a in ages %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="age-{{ a.slug }}">{{ a.title }}</button>{% endfor %}
+  </div>
+  {% for a in ages %}
+  <div class="panel {{ 'on' if loop.first else '' }}" data-panel="age-{{ a.slug }}">
+    <h2>{{ a.title }}</h2>
+    {% if a.ready %}
+      {% if a.what_develops %}<h3>Что развивается</h3><ul class="nice">{% for x in a.what_develops %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if a.games %}<h3>Во что играть</h3><ul class="nice" style="--c:var(--mint)">{% for x in a.games %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if a.watch %}<h3>На что обратить внимание</h3><ul class="nice" style="--c:var(--sky)">{% for x in a.watch %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      <div class="prose">{{ a.body_html | safe }}</div>
+      {% if a.files %}<div class="files">{% for f in a.files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div>{% endif %}
+    {% else %}
+      <div class="note">Материалы для этого возраста готовятся.</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

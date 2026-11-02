@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Уровни речевого развития{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  <div class="grid" style="margin-top:20px">
+    {% for l in levels %}<a class="card" href="{{ root }}urovni/{{ l.slug }}/index.html">
+      <div class="ico" style="background:{{ ['#d9f5ee','#ffe1d6','#e6efff'][loop.index0 % 3] }};font-weight:900">{{ l.slug }}</div>
+      <h3>{{ l.title }}</h3><p class="muted">{{ l.subtitle }}</p></a>{% endfor %}
+  </div>
+</div>
+{% endblock %}

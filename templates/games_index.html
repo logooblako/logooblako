@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Игры{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>Игры и презентации</h1>
+  <p class="muted">Короткие онлайн-игры для занятий: можно играть на телефоне, планшете или на большом экране.</p>
+  <div class="grid" style="margin-bottom:18px">
+    <a class="card" href="{{ root }}igry/sozdat/index.html" style="background:linear-gradient(135deg,#8fd3ff,#5b8cff);color:#fff;border:0">
+      <div class="ico" style="background:rgba(255,255,255,.25)">➕</div><h3>Создать свою игру</h3><p>Викторина, пары, колесо, карточки, презентация — за пару минут. Можно добавить картинки и аудио.</p></a>
+  </div>
+  <div class="grid">
+    {% for g in games %}<a class="card" href="{{ root }}igry/{{ g.slug }}/index.html">
+      <div class="ico" style="background:{{ {'quiz':'#e6efff','pairs':'#ffe1d6','sort':'#d9f5ee','wheel':'#fff1c9','flip':'#f1ecff','slides':'#ffe6ef'}.get(g.template,'#eee') }}">{{ {'quiz':'❓','pairs':'🃏','sort':'🏠','wheel':'🎡','flip':'🔄','slides':'🖼️'}.get(g.template,'🎲') }}</div>
+      <h3>{{ g.title }}</h3><p class="muted">{{ g.description }}</p>
+      <span class="tag">{{ names.get(g.template, g.template) }}</span></a>{% endfor %}
+  </div>
+</div>
+{% endblock %}

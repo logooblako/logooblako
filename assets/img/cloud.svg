@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Логооблако">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8fd3ff"/><stop offset="1" stop-color="#5b8cff"/>
+    </linearGradient>
+  </defs>
+  <path d="M30 78 L22 92 L42 80 Z" fill="#5b8cff"/>
+  <path d="M28 80 C12 80 4 68 8 56 C11 46 20 42 28 43 C29 28 42 18 56 20 C66 10 86 12 92 26 C106 24 116 36 113 49 C120 56 117 76 100 80 Z" fill="url(#g)"/>
+  <circle cx="48" cy="52" r="4.5" fill="#1f2a5c"/><circle cx="74" cy="52" r="4.5" fill="#1f2a5c"/>
+  <circle cx="49.5" cy="50.5" r="1.5" fill="#fff"/><circle cx="75.5" cy="50.5" r="1.5" fill="#fff"/>
+  <path d="M53 62 q8 7 16 0" stroke="#1f2a5c" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="61" r="4" fill="#ff8fb1" opacity=".7"/><circle cx="82" cy="61" r="4" fill="#ff8fb1" opacity=".7"/>
+</svg>
