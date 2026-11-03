@@ -11,7 +11,6 @@
       <input type="hidden" name="_subject" value="Логооблако: новое сообщение с сайта">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="{{ site.site_url }}/otzyvy/index.html?sent=1">
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
       <label><b>Как вас зовут</b><input name="Имя" required placeholder="Например, Ольга, мама Миши"></label>
       <label><b>Что вы хотите оставить</b>
@@ -21,8 +20,30 @@
       <label style="display:flex;gap:10px;align-items:flex-start;font-size:16px"><input type="checkbox" name="Можно опубликовать" value="да" checked style="width:auto;margin-top:4px"> Можно опубликовать мой отзыв на сайте (только имя и текст)</label>
       <button class="btn main" type="submit" style="justify-self:start">Отправить</button>
     </form>
-    <div class="note" id="sent" style="display:none;margin-top:12px">Спасибо! Сообщение отправлено. Отзыв появится на сайте после проверки.</div>
-    <script>if (location.search.indexOf("sent=1") > -1) { document.getElementById("sent").style.display = "block"; }</script>
+    <div class="note" id="sent" style="display:none;margin-top:12px"></div>
+    <script>
+    (function () {
+      var f = document.querySelector("form.fb"), box = document.getElementById("sent"), btn = f.querySelector("button[type=submit]");
+      f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        btn.disabled = true; btn.textContent = "Отправляем…";
+        fetch("https://formsubmit.co/ajax/{{ site.email }}", { method: "POST", headers: { "Accept": "application/json" }, body: new FormData(f) })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (d.success === "true" || d.success === true) {
+              box.style.cssText = "display:block;margin-top:12px;background:#e3f8f1;border-color:#9be3cd";
+              box.innerHTML = "<b>Спасибо! Сообщение отправлено.</b> Отзыв появится на сайте после проверки.";
+              f.reset();
+            } else { throw new Error(d.message || "error"); }
+          })
+          .catch(function () {
+            box.style.cssText = "display:block;margin-top:12px;background:#ffe9e1;border-color:#ffc3ae";
+            box.innerHTML = "Не получилось отправить. Проверьте интернет и попробуйте ещё раз или напишите на почту <a href=\"mailto:{{ site.email }}\">{{ site.email }}</a>.";
+          })
+          .finally(function () { btn.disabled = false; btn.textContent = "Отправить"; });
+      });
+    })();
+    </script>
     {% else %}
     <div class="note">Форма скоро заработает.</div>
     {% endif %}
