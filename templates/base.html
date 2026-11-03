@@ -48,6 +48,7 @@
     <span data-copied class="muted"></span></div>
   <p><b>{{ site.site_name }}</b> — {{ site.tagline }}. Автор: {{ site.author }}.</p>
   <p>{{ site.footer_note }}</p>
+  {% if site.beta_note %}<p style="font-size:14px">{{ site.beta_note }}</p>{% endif %}
   {% if site.messenger_note %}<p style="font-size:14px">{{ site.messenger_note }}</p>{% endif %}
   <p class="muted" style="color:#b9b8d6">Картинки: <a href="https://github.com/jdecked/twemoji">Twemoji</a>, лицензия <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>. Шрифт Nunito (SIL OFL).</p>
 </div></footer>

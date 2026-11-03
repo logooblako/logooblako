@@ -39,6 +39,7 @@ content:
       - { name: footer_note, label: Примечание в подвале, type: text }
       - { name: google_verify, label: "Код подтверждения Google (meta-тег, только content)", type: string }
       - { name: yandex_verify, label: "Код подтверждения Яндекса (meta-тег, только content)", type: string }
+      - { name: beta_note, label: "Предупреждение «сайт в работе» в подвале", type: text }
       - { name: messenger_note, label: "Предупреждение о Telegram в подвале", type: text }
       - { name: auto_sources, label: "Источники для страниц звуков", type: string, list: true }
 
