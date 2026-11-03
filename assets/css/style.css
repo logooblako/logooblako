@@ -175,3 +175,9 @@ details summary{cursor:pointer}
 form.fb{display:grid;gap:12px}
 form.fb input,form.fb textarea,form.fb select{font:inherit;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);width:100%}
 form.fb textarea{min-height:120px}
+
+table.cmp{width:100%;border-collapse:collapse;min-width:560px}
+table.cmp th,table.cmp td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.cmp thead th{background:#f4f8ff}
+table.cmp thead th:nth-child(2){color:#17805f}table.cmp thead th:nth-child(3){color:#c2471f}
+table.cmp tbody th{width:22%;font-weight:700}

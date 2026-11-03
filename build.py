@@ -85,6 +85,10 @@ def main():
                game=json.dumps([{"w": w["word"], "p": w["pic"]} for w in s["all_words"]], ensure_ascii=False))
     fon = load(os.path.join(ROOT, "content", "fonematika.md"))
     render("fonematika.html", "fonematika/index.html", nav="fonematika", f=fon, files=cm.fonematika(fon, "files/fonematika/fonematika"))
+    topics = sorted(coll("topics"), key=lambda x: x.get("order", 99))
+    for tp in topics:
+        render("topic.html", f"{tp['slug']}/index.html", nav=tp["slug"], t=tp,
+               files=cm.topic(tp, f"files/{tp['slug']}/{tp['slug']}", tp["title"][0]))
     render("diffs_index.html", "differentsiatsiya/index.html", nav="diff", diffs=diffs)
     for d in diffs:
         g = [{"w": w["word"], "p": w["pic"], "h": "a"} for w in d.get("words_a") or [] if w.get("pic")] + \

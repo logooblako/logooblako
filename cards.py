@@ -81,7 +81,7 @@ class Cards:
         p.draw_circle(fitz.Point(W - 92, hh), 22, color=None, fill=TINT(col, 0.25))
         p.draw_circle(fitz.Point(M + 34, 52), 32, color=None, fill=WHITE)
         self.center(p, fitz.Rect(M + 2, 20, M + 66, 84), s["letter"], 30, True, col)
-        tag = f"Карточка {num}" if num else "Задания"
+        tag = s.get("tag") or (f"Карточка {num}" if num else "Задания")
         self.box(p, fitz.Rect(M + 82, 18, M + 82 + self.tl(tag, 10, True) + 20, 36), fill=TINT(col, 0.3), stroke=None, radius=9)
         self.put(p, M + 92, 21.5, tag, 10, True, WHITE)
         self.put(p, M + 82, 42, title, 20, True, WHITE)
@@ -90,7 +90,7 @@ class Cards:
         # подвал
         self.pic(p, "/assets/img/cloud.svg", fitz.Rect(M, H - 34, M + 24, H - 14))
         self.put(p, M + 30, H - 30, f"Логооблако · {SITE}", 8.5, True, MUTED)
-        self.put(p, M + 30, H - 20, "По методическим рекомендациям Н. В. Нищевой, Ю. Б. Жихаревой-Норкиной. Картинки: Twemoji (CC-BY 4.0).", 7, False, MUTED)
+        self.put(p, M + 30, H - 20, s.get("foot") or "По методическим рекомендациям Н. В. Нищевой, Ю. Б. Жихаревой-Норкиной. Картинки: Twemoji (CC-BY 4.0).", 7, False, MUTED)
         return p, hh + 18
 
     def heading(self, p, y, text, color):
@@ -350,6 +350,42 @@ class Cards:
 
 
     # ---------- фонематический слух
+    def topic(self, t, base, letter):
+        s = {"letter": letter, "group": "Сонорные", "tag": "Памятка для родителей",
+             "foot": ("Литература: " + "; ".join((x.split(" — ")[0]) for x in (t.get("sources") or [])[:2]))[:150]}
+        doc = fitz.open()
+        fl = self.Flow(self, doc, s, None, t["title"] + ": памятка", t.get("intro", "").split(". ")[0] + ".")
+        palette = [MINT, SKY, CORAL, LAV, SUN, PINK]
+        def bullets(title, items, c):
+            if not items: return
+            fl.need(60); fl.y = self.heading(fl.p, fl.y, title, c)
+            for x in items:
+                lines = self.wrap("• " + x, 10.5, W - 2 * M - 30)
+                fl.need(14 * len(lines) + 4)
+                for ln in lines: self.put(fl.p, M + 20, fl.y, ln, 10.5); fl.y += 14
+                fl.y += 3
+            fl.y += 8
+        bullets(t.get("rules_title") or "Как заниматься", t.get("rules"), MINT)
+        for i, st in enumerate(t.get("stages") or []):
+            c = palette[(i + 1) % 6]
+            fl.need(80); fl.y = self.heading(fl.p, fl.y, st["title"], c)
+            if st.get("goal"): fl.y = self.para(fl.p, M + 20, fl.y, st["goal"], 10, W - 2 * M - 20, color=MUTED) + 4
+            for g in st.get("games") or []:
+                lines = self.wrap(g["how"], 10.5, W - 2 * M - 40)
+                hh = 26 + 14 * len(lines)
+                fl.need(hh + 6)
+                r = fitz.Rect(M + 20, fl.y, W - M, fl.y + hh)
+                self.box(fl.p, r, fill=WHITE, stroke=TINT(c, 0.4), radius=12)
+                self.put(fl.p, r.x0 + 12, r.y0 + 7, g["title"], 11.5, True)
+                yy = r.y0 + 23
+                for ln in lines: self.put(fl.p, r.x0 + 12, yy, ln, 10.5); yy += 14
+                fl.y += hh + 6
+            fl.y += 6
+        bullets(t.get("tips_title") or "Советы родителям", t.get("tips"), SKY)
+        bullets("Когда обратиться к специалисту", t.get("alarm"), CORAL)
+        self.save(doc, base + "-pamyatka.pdf")
+        return [{"title": t["title"] + ": памятка с играми", "file": "/" + base + "-pamyatka.pdf"}]
+
     def fonematika(self, f, base):
         s = {"letter": "Ф", "group": "Сонорные"}
         files = []

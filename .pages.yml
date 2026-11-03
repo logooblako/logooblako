@@ -325,6 +325,46 @@ content:
         fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
       - { name: body, label: О себе, type: rich-text }
 
+  - name: topics
+    label: "🗣️ Запинки, артикуляция, дыхание"
+    type: collection
+    path: content/topics
+    view: { fields: [title, order] }
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: intro, label: Вступление, type: text }
+      - { name: warning, label: Важное предупреждение, type: text }
+      - { name: facts_title, label: Заголовок блока фактов, type: string }
+      - name: facts
+        label: Что говорит наука (карточки)
+        type: object
+        list: true
+        fields: [{ name: title, label: Заголовок, type: string }, { name: text, label: Текст, type: text }]
+      - name: compare
+        label: Таблица сравнения
+        type: object
+        fields:
+          - { name: title, label: Заголовок, type: string }
+          - { name: a, label: Колонка 1, type: string }
+          - { name: b, label: Колонка 2, type: string }
+          - { name: rows, label: Строки, type: object, list: true, fields: [{ name: sign, label: Признак, type: string }, { name: a, label: Колонка 1, type: text }, { name: b, label: Колонка 2, type: text }] }
+      - { name: rules_title, label: Заголовок правил, type: string }
+      - { name: rules, label: Правила, type: text, list: true }
+      - { name: stages_title, label: Заголовок игр, type: string }
+      - { name: stages_intro, label: Пояснение к играм, type: text }
+      - name: stages
+        label: Этапы и игры (вкладки)
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название вкладки, type: string }
+          - { name: goal, label: Цель, type: text }
+          - { name: games, label: Игры, type: object, list: true, fields: [{ name: title, label: Название, type: string }, { name: how, label: Как играть, type: text }] }
+      - { name: tips_title, label: Заголовок советов, type: string }
+      - { name: tips, label: Советы, type: text, list: true }
+      - { name: alarm, label: Когда к специалисту, type: text, list: true }
+      - { name: sources, label: Литература, type: text, list: true }
   - name: fonematika
     label: "👂 Фонематический слух"
     type: file

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ t.title }}{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ t.title }}</h1>
+  <div class="card"><p style="margin:0">{{ t.intro }}</p></div>
+  {% if t.warning %}<div class="note" style="margin-top:14px">{{ t.warning }}</div>{% endif %}
+
+  {% if t.facts %}<div class="section"><h2>{{ t.facts_title or "Что важно знать" }}</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">{% for f in t.facts %}<div class="card"><h3>{{ f.title }}</h3><p style="margin:0">{{ f.text }}</p></div>{% endfor %}</div>
+  </div>{% endif %}
+
+  {% if t.compare %}<div class="section"><h2>{{ t.compare.title }}</h2>
+    <div class="card" style="overflow-x:auto;padding:0"><table class="cmp"><thead><tr><th></th><th>{{ t.compare.a }}</th><th>{{ t.compare.b }}</th></tr></thead>
+    <tbody>{% for r in t.compare.rows %}<tr><th>{{ r.sign }}</th><td>{{ r.a }}</td><td>{{ r.b }}</td></tr>{% endfor %}</tbody></table></div>
+  </div>{% endif %}
+
+  {% if t.rules %}<div class="section"><h2>{{ t.rules_title or "Как заниматься" }}</h2><ul class="nice" style="--c:var(--mint)">{% for x in t.rules %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+
+  {% if t.stages %}<div class="section"><h2>{{ t.stages_title or "Игры и упражнения" }}</h2>
+    {% if t.stages_intro %}<p class="muted">{{ t.stages_intro }}</p>{% endif %}
+    <div>
+    <div class="tabs" data-tabs data-hash>{% for st in t.stages %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="r{{ loop.index }}">{{ st.title }}</button>{% endfor %}</div>
+    {% for st in t.stages %}<div class="panel {{ 'on' if loop.first else '' }}" data-panel="r{{ loop.index }}">
+      {% if st.goal %}<div class="note" style="margin-bottom:14px">{{ st.goal }}</div>{% endif %}
+      <div class="two">{% for g in st.games or [] %}<div class="card"><h3>{{ g.title }}</h3><p style="margin:0">{{ g.how }}</p></div>{% endfor %}</div>
+    </div>{% endfor %}
+    </div>
+  </div>{% endif %}
+
+  <div class="section two">
+    {% if t.tips %}<div><h2>{{ t.tips_title or "Советы родителям" }}</h2><ul class="nice" style="--c:var(--sky)">{% for x in t.tips %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if t.alarm %}<div><h2>Когда обратиться к специалисту</h2><ul class="nice">{% for x in t.alarm %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+
+  {% if files %}<div class="section"><h2>Скачать и распечатать</h2><div class="files">{% for x in files %}<a class="file" href="{{ u(x.file) }}" download><span class="pdf">PDF</span>{{ x.title }}</a>{% endfor %}</div></div>{% endif %}
+
+  {% if t.sources %}<div class="section"><h2>Литература</h2><ul class="nice" style="--c:var(--sun)">{% for x in t.sources %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+</div>
+{% endblock %}
