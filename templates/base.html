@@ -21,12 +21,14 @@
     {% for key, href, label in [
       ("zvuki","zvuki/index.html","Звуки"),
       ("diff","differentsiatsiya/index.html","Различаем звуки"),
+      ("fonematika","fonematika/index.html","Фонематический слух"),
       ("urovni","urovni/index.html","Уровни речи"),
       ("motorika","motorika/index.html","Моторика"),
-      ("poznanie","poznanie/index.html","Познание 0–3"),
+      ("poznanie","poznanie/index.html","Познание 0–11"),
       ("chitat","chitat/index.html","Почитать и посмотреть"),
       ("igry","igry/index.html","Игры"),
       ("skazki","skazki/index.html","Сказки"),
+      ("ii","ii/index.html","Сгенерировано ИИ"),
       ("otzyvy","otzyvy/index.html","Отзывы"),
       ("avtor","avtor/index.html","Об авторе")] %}
       <a href="{{ root }}{{ href }}" class="{{ 'on' if nav == key else '' }}">{{ label }}</a>
@@ -44,6 +46,7 @@
     <span data-copied class="muted"></span></div>
   <p><b>{{ site.site_name }}</b> — {{ site.tagline }}. Автор: {{ site.author }}.</p>
   <p>{{ site.footer_note }}</p>
+  {% if site.messenger_note %}<p style="font-size:14px">{{ site.messenger_note }}</p>{% endif %}
   <p class="muted" style="color:#b9b8d6">Картинки: <a href="https://github.com/jdecked/twemoji">Twemoji</a>, лицензия <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>. Шрифт Nunito (SIL OFL).</p>
 </div></footer>
 <script src="{{ root }}assets/js/app.js"></script>

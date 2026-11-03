@@ -1,25 +1,64 @@
 {% extends "base.html" %}
-{% block title %}Развитие познавательной активности{% endblock %}
+{% block title %}Познавательное развитие 0–11 лет{% endblock %}
 {% block main %}
 <div class="wrap section">
   <h1>{{ intro.title }}</h1>
-  <div class="card prose">{{ intro.body_html | safe }}{% if intro.source %}<p class="muted">Источник: {{ intro.source }}</p>{% endif %}</div>
-  <div class="tabs" data-tabs data-hash style="margin-top:20px">
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  <div class="section">
+  <div class="tabs" data-tabs data-hash>
     {% for a in ages %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="age-{{ a.slug }}">{{ a.title }}</button>{% endfor %}
   </div>
   {% for a in ages %}
   <div class="panel {{ 'on' if loop.first else '' }}" data-panel="age-{{ a.slug }}">
     <h2>{{ a.title }}</h2>
     {% if a.ready %}
-      {% if a.what_develops %}<h3>Что развивается</h3><ul class="nice">{% for x in a.what_develops %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
-      {% if a.games %}<h3>Во что играть</h3><ul class="nice" style="--c:var(--mint)">{% for x in a.games %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
-      {% if a.watch %}<h3>На что обратить внимание</h3><ul class="nice" style="--c:var(--sky)">{% for x in a.watch %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if a.about %}<p>{{ a.about }}</p>{% endif %}
+      <div class="two">
+        {% if a.what_develops %}<div><h3>Что умеет ребёнок</h3><ul class="nice">{% for x in a.what_develops %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+        {% if a.games %}<div><h3>Во что играть</h3><ul class="nice" style="--c:var(--mint)">{% for x in a.games %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+      </div>
+      {% if a.watch %}<h3 style="margin-top:20px">Когда стоит обратиться к специалисту</h3><ul class="nice" style="--c:var(--sky)">{% for x in a.watch %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
       <div class="prose">{{ a.body_html | safe }}</div>
       {% if a.files %}<div class="files">{% for f in a.files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div>{% endif %}
+      {% if a.test %}
+      <div class="card" style="margin-top:24px" data-test>
+        <h3 style="margin-top:0">Тест для родителей: {{ a.title }}</h3>
+        <p class="muted">Отметьте, как чаще всего бывает. Результат появится автоматически, когда вы ответите на все вопросы.</p>
+        <div class="qa">{% for q in a.test %}<div class="q"><div>{{ loop.index }}. {{ q }}</div><div class="opts"><button type="button" data-v="2">Да</button><button type="button" data-v="1">Иногда / с помощью</button><button type="button" data-v="0">Нет</button></div></div>{% endfor %}</div>
+        <div class="result" data-result></div>
+        <p class="muted" style="font-size:14px;margin-bottom:0">Тест — ориентир для родителей, а не диагноз. Если что-то беспокоит, обратитесь к логопеду, дефектологу или психологу.</p>
+      </div>{% endif %}
     {% else %}
       <div class="note">Материалы для этого возраста готовятся.</div>
     {% endif %}
   </div>
   {% endfor %}
+  </div>
+
+  {% if intro.books %}<div class="section"><h2>Что почитать родителям</h2>
+    <div class="grid">{% for b in intro.books %}<div class="card"><h3 style="font-size:19px">{{ b.title }}</h3><div class="muted">{{ b.author }}</div><p style="font-size:16px">{{ b.note }}</p>
+      <div class="btns" style="margin-top:6px"><a class="btn soft" style="font-size:14px;padding:6px 12px" target="_blank" rel="noopener" href="https://www.labirint.ru/search/{{ (b.title ~ ' ' ~ b.author.split(',')[0].replace('под ред. ', '')) | urlencode }}/">Найти в «Лабиринте»</a>
+      <a class="btn soft" style="font-size:14px;padding:6px 12px" target="_blank" rel="noopener" href="https://www.litres.ru/search/?q={{ (b.title ~ ' ' ~ b.author.split(',')[0].replace('под ред. ', '')) | urlencode }}">Найти на «Литрес»</a></div></div>{% endfor %}</div>
+  </div>{% endif %}
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll("[data-test]").forEach(function (box) {
+  var qs = box.querySelectorAll(".q"), res = box.querySelector("[data-result]");
+  box.querySelectorAll(".opts button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      b.parentNode.querySelectorAll("button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var sum = 0, done = 0;
+      qs.forEach(function (q) { var o = q.querySelector("button.on"); if (o) { done++; sum += +o.dataset.v; } });
+      if (done < qs.length) { res.className = "result"; return; }
+      var p = sum / (qs.length * 2);
+      if (p >= 0.8) { res.className = "result on ok"; res.innerHTML = "<b>Всё идёт по возрасту.</b> Ребёнок справляется с тем, что обычно умеют дети этого возраста. Продолжайте играть и заниматься — игры из списка выше помогут развиваться дальше."; }
+      else if (p >= 0.5) { res.className = "result on mid"; res.innerHTML = "<b>Есть над чем поработать.</b> Часть навыков ещё формируется. Поиграйте в игры из этого раздела 2–3 недели и пройдите тест снова. Если результат не изменится, покажите ребёнка специалисту."; }
+      else { res.className = "result on low"; res.innerHTML = "<b>Рекомендуем консультацию специалиста.</b> Многие навыки пока не сформированы. Это не диагноз, но лучше показать ребёнка логопеду, дефектологу или психологу — чем раньше начать помогать, тем лучше результат."; }
+    });
+  });
+});
+</script>
 {% endblock %}

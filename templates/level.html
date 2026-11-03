@@ -15,6 +15,12 @@
     <div><h2>Куда сходить</h2><ul class="nice" style="--c:var(--sky)">{% for x in l.places or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
     <div><h2>Сказки и стихи</h2><ul class="nice" style="--c:var(--sun)">{% for x in l.tales or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
   </div>
+  {% if l.tale_how or l.tale_questions %}<div class="section"><div class="card" style="background:#fffaf0">
+    <h2 style="margin-top:0">📖 Памятка: как читать сказки</h2>
+    <div class="two">
+      <div><h3>Как читать</h3><ul class="nice" style="--c:var(--sun)">{% for x in l.tale_how or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+      <div><h3>Какие вопросы задавать</h3><ul class="nice" style="--c:var(--lav)">{% for x in l.tale_questions or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+    </div></div></div>{% endif %}
   <div class="section two">
     <div><h2>Приложения</h2><ul class="nice" style="--c:var(--lav)">{% for x in l.apps or [] %}<li>{{ x }}</li>{% endfor %}</ul>
       {% if l.apps_note %}<p class="note" style="margin-top:10px">{{ l.apps_note }}</p>{% endif %}</div>

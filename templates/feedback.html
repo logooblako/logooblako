@@ -3,12 +3,38 @@
 {% block main %}
 <div class="wrap section" style="max-width:860px">
   <h1>Отзывы, благодарности и вопросы</h1>
-  <p class="muted">Здесь можно оставить отзыв, сказать спасибо или задать вопрос. Сообщения видят все посетители сайта.</p>
-  {% if site.feedback_post %}
-    <div class="card"><script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-discussion="{{ site.feedback_post }}" data-comments-limit="50" data-colorful="1" data-color="8E7CFF"></script></div>
-    <p class="muted" style="font-size:15px">Чтобы написать, нужно войти через Telegram. Автор отвечает в этом же чате.</p>
-  {% else %}
-    <div class="note">Чат скоро заработает.</div>
-  {% endif %}
+  <p class="muted">Оставьте отзыв, скажите спасибо или задайте вопрос. Регистрация не нужна. Сообщение придёт автору. Отзывы появляются на сайте после проверки, а на вопросы автор отвечает прямо здесь.</p>
+
+  <div class="card" id="form">
+    {% if site.email %}
+    <form class="fb" action="https://formsubmit.co/{{ site.email }}" method="POST">
+      <input type="hidden" name="_subject" value="Логооблако: новое сообщение с сайта">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="{{ site.site_url }}/otzyvy/index.html?sent=1">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+      <label><b>Как вас зовут</b><input name="Имя" required placeholder="Например, Ольга, мама Миши"></label>
+      <label><b>Что вы хотите оставить</b>
+        <select name="Тип"><option>Отзыв</option><option>Благодарность</option><option>Вопрос</option></select></label>
+      <label><b>Сообщение</b><textarea name="Сообщение" required placeholder="Ваш отзыв или вопрос"></textarea></label>
+      <label><b>Почта или телефон для ответа</b> <span class="muted">(необязательно, на сайте не показывается)</span><input name="Контакт"></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:16px"><input type="checkbox" name="Можно опубликовать" value="да" checked style="width:auto;margin-top:4px"> Можно опубликовать мой отзыв на сайте (только имя и текст)</label>
+      <button class="btn main" type="submit" style="justify-self:start">Отправить</button>
+    </form>
+    <div class="note" id="sent" style="display:none;margin-top:12px">Спасибо! Сообщение отправлено. Отзыв появится на сайте после проверки.</div>
+    <script>if (location.search.indexOf("sent=1") > -1) { document.getElementById("sent").style.display = "block"; }</script>
+    {% else %}
+    <div class="note">Форма скоро заработает.</div>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Что пишут родители</h2>
+    {% for r in reviews %}<div class="review">
+      <div><b>{{ r.name }}</b>{% if r.kind %}<span class="tag">{{ r.kind }}</span>{% endif %}{% if r.date %}<span class="muted" style="font-size:14px;margin-left:8px">{{ r.date }}</span>{% endif %}</div>
+      <div style="margin-top:6px">{{ r.body_html | safe }}</div>
+      {% if r.answer %}<div class="ans"><b>Ответ автора:</b> {{ r.answer }}</div>{% endif %}
+    </div>{% else %}<p class="muted">Здесь пока нет отзывов — станьте первым!</p>{% endfor %}
+  </div>
 </div>
 {% endblock %}

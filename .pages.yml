@@ -37,6 +37,8 @@ content:
       - { name: site_url, label: "Адрес сайта (https://...)", type: string }
       - { name: feedback_post, label: "Пост Telegram для чата отзывов (имя_канала/номер_поста)", type: string }
       - { name: footer_note, label: Примечание в подвале, type: text }
+      - { name: messenger_note, label: "Предупреждение о Telegram в подвале", type: text }
+      - { name: auto_sources, label: "Источники для страниц звуков", type: string, list: true }
 
   - name: sounds
     label: "🔤 Звуки (автоматизация)"
@@ -49,15 +51,42 @@ content:
       - { name: group, label: Группа, type: select, options: { values: [Свистящие, Шипящие, Сонорные, Заднеязычные] } }
       - { name: order, label: Порядок, type: number }
       - { name: articulation, label: Как произносится, type: text }
-      - { name: syllables, label: "Слоги (каждый ряд с новой строки, слоги через дефис)", type: text }
+      - { name: syl_open, label: "1. Открытые слоги (каждый ряд с новой строки, слоги через дефис)", type: text }
+      - { name: syl_closed, label: "1. Закрытые слоги", type: text }
+      - { name: syl_closed_note, label: "1. Пояснение к закрытым слогам (если их нет)", type: text }
+      - { name: syl_cluster, label: "1. Слоги со стечением согласных", type: text }
+      - name: word_steps
+        label: "2. Слова по усложнению (шаги)"
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название шага, type: string }
+          - { name: words, label: Слова через запятую, type: text }
       - { name: words_start, label: Слова — звук в начале, component: word, list: true }
       - { name: words_middle, label: Слова — звук в середине, component: word, list: true }
       - { name: words_end, label: Слова — звук в конце, component: word, list: true }
       - { name: extra_words, label: Ещё слова (без картинок), type: text }
-      - { name: phrases, label: Словосочетания, type: string, list: true }
+      - { name: phrases, label: "3. Словосочетания", type: string, list: true }
       - { name: sentences, label: Предложения, type: string, list: true }
-      - { name: chistogovorki, label: Чистоговорки, type: string, list: true }
+      - { name: chistogovorki, label: "4. Чистоговорки", type: string, list: true }
       - { name: skorogovorki, label: Скороговорки, type: string, list: true }
+      - name: retell
+        label: "5. Рассказы для пересказа"
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Название, type: string }
+          - { name: text, label: Текст рассказа, type: text }
+          - { name: questions, label: Вопросы, type: string, list: true }
+      - name: tasks
+        label: "Задания (грамматика, словарь, связная речь)"
+        type: object
+        list: true
+        fields:
+          - { name: area, label: Раздел, type: select, options: { values: [Грамматика, Лексика, Связная речь] } }
+          - { name: title, label: Название задания, type: string }
+          - { name: instruction, label: Инструкция, type: text }
+          - { name: items, label: Пункты задания, type: string, list: true }
       - { name: audios, label: Аудио для прослушивания, component: file, list: true }
       - { name: files, label: Дополнительные файлы для скачивания, component: file, list: true }
       - { name: body, label: Текст «Как заниматься», type: rich-text }
@@ -101,6 +130,8 @@ content:
       - { name: home, label: Домашний день, type: text, list: true }
       - { name: places, label: Куда сходить, type: text, list: true }
       - { name: tales, label: Сказки и стихи, type: string, list: true }
+      - { name: tale_how, label: "Памятка: как читать сказки", type: text, list: true }
+      - { name: tale_questions, label: "Памятка: какие вопросы задавать", type: text, list: true }
       - { name: books, label: Литература для родителей, type: text, list: true }
       - { name: apps, label: Приложения, type: text, list: true }
       - { name: apps_note, label: Примечание о приложениях, type: text }
@@ -141,9 +172,11 @@ content:
       - { name: title, label: Возраст, type: string }
       - { name: order, label: Порядок, type: number }
       - { name: ready, label: Показывать на сайте, type: boolean }
-      - { name: what_develops, label: Что развивается, type: text, list: true }
+      - { name: about, label: Описание возраста, type: text }
+      - { name: what_develops, label: Что умеет ребёнок, type: text, list: true }
       - { name: games, label: Во что играть, type: text, list: true }
-      - { name: watch, label: На что обратить внимание, type: text, list: true }
+      - { name: watch, label: Когда обратиться к специалисту, type: text, list: true }
+      - { name: test, label: "Тест для родителей (вопросы)", type: string, list: true }
       - { name: files, label: Файлы, component: file, list: true }
       - { name: body, label: Дополнительный текст, type: rich-text }
 
@@ -236,6 +269,27 @@ content:
       - { name: name, label: ФИО, type: string }
       - { name: role, label: Должность, type: string }
       - { name: photo, label: Фото, type: image, options: { media: files } }
+      - name: links
+        label: Ссылки (кнопки под именем)
+        type: object
+        list: true
+        fields: [{ name: title, label: Текст кнопки, type: string }, { name: url, label: Ссылка, type: string }]
+      - name: work
+        label: Место работы
+        type: object
+        list: true
+        fields: [{ name: year, label: Годы, type: string }, { name: title, label: Где и кем, type: string }]
+      - { name: science_intro, label: "Наука: научные интересы", type: text }
+      - name: projects
+        label: "Наука: проекты и экспертная работа"
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: link, label: Ссылка, type: string }]
+      - name: publications
+        label: "Наука: статьи и публикации"
+        type: object
+        list: true
+        fields: [{ name: year, label: Год, type: string }, { name: title, label: Описание, type: text }, { name: link, label: Ссылка, type: string }, { name: file, label: Файл, type: file, options: { media: files } }]
       - name: products
         label: Авторские продукты
         type: object
@@ -267,6 +321,68 @@ content:
         list: true
         fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
       - { name: body, label: О себе, type: rich-text }
+
+  - name: fonematika
+    label: "👂 Фонематический слух"
+    type: file
+    path: content/fonematika.md
+    fields:
+      - { name: title, label: Заголовок, type: string }
+      - { name: intro, label: Вступление, type: text }
+      - name: norms
+        label: Нормы по возрастам
+        type: object
+        list: true
+        fields: [{ name: age, label: Возраст, type: string }, { name: text, label: Что умеет, type: text }]
+      - name: stages
+        label: Этапы работы
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Этап, type: string }
+          - { name: goal, label: Задача этапа, type: text }
+          - name: games
+            label: Игры
+            type: object
+            list: true
+            fields: [{ name: title, label: Название, type: string }, { name: how, label: Как играть, type: text }]
+      - { name: tips, label: Советы родителям, type: text, list: true }
+      - { name: alarm, label: Когда обратиться к специалисту, type: text, list: true }
+      - { name: sources, label: Литература, type: text, list: true }
+
+  - name: reviews
+    label: "💬 Отзывы (публикация)"
+    type: collection
+    path: content/reviews
+    view: { primary: name, fields: [name, date, published] }
+    fields:
+      - { name: name, label: Имя, type: string }
+      - { name: date, label: Дата, type: date }
+      - { name: kind, label: Тип, type: select, options: { values: [Отзыв, Благодарность, Вопрос] } }
+      - { name: published, label: Показывать на сайте, type: boolean, default: true }
+      - { name: answer, label: Ответ автора, type: text }
+      - { name: body, label: Текст отзыва, type: rich-text }
+
+  - name: ai
+    label: "🤖 Сгенерировано ИИ"
+    type: collection
+    path: content/ai
+    view: { primary: title, fields: [title, kind] }
+    fields:
+      - { name: title, label: Название, type: string }
+      - { name: kind, label: Раздел, type: select, options: { values: [Картинки для автоматизации, Воздушная струя, Дикция, Другое] } }
+      - { name: sound, label: "Звук (для картинок, например [Р])", type: string }
+      - { name: age, label: Возраст, type: string }
+      - { name: order, label: Порядок, type: number }
+      - { name: published, label: Показывать на сайте, type: boolean, default: true }
+      - { name: description, label: Короткое описание, type: text }
+      - name: images
+        label: Картинки
+        type: object
+        list: true
+        fields: [{ name: word, label: Подпись, type: string }, { name: image, label: Картинка, type: image, options: { media: files } }]
+      - { name: files, label: Файлы для скачивания, component: file, list: true }
+      - { name: body, label: Текст и задания, type: rich-text }
 
   - name: pages
     label: "📄 Вступительные тексты разделов"

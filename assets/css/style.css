@@ -150,3 +150,28 @@ footer a{color:#ffd27a}
 .picker{border:0;border-radius:24px;padding:18px;width:min(760px,94vw);max-height:86vh;box-shadow:0 30px 80px rgba(0,0,0,.25)}
 .picker::backdrop{background:rgba(43,42,76,.45)}
 .pk-head{display:flex;gap:8px;margin-bottom:12px}.pk-head .inp{margin:0}
+
+/* страница звука: шаги и кнопки скачивания */
+.stephead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.stephead h2{margin:0}
+.btn.dl{padding:8px 16px;font-size:15px}
+.steps{display:grid;gap:10px}
+.step{display:flex;gap:14px;align-items:flex-start;padding:14px 18px}
+.step .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900}
+details summary{cursor:pointer}
+/* вкладки на странице автора и в разделах */
+.qa{display:grid;gap:12px}
+.qa .q{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px}
+.qa .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.qa .opts button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-family:inherit;font-size:15px;cursor:pointer;color:var(--ink)}
+.qa .opts button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.result{margin-top:14px;border-radius:18px;padding:16px 18px;display:none}
+.result.on{display:block}
+.result.ok{background:#e3f8f1;border:2px solid #9be3cd}
+.result.mid{background:#fff7d6;border:2px solid #ffe28a}
+.result.low{background:#ffe9e1;border:2px solid #ffc3ae}
+.review{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:10px 0}
+.review .ans{margin-top:10px;padding:10px 14px;background:var(--bg2);border-radius:14px}
+form.fb{display:grid;gap:12px}
+form.fb input,form.fb textarea,form.fb select{font:inherit;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:#fff;color:var(--ink);width:100%}
+form.fb textarea{min-height:120px}

@@ -1,24 +1,56 @@
 {% extends "base.html" %}
 {% block title %}Об авторе{% endblock %}
+{% macro lst(items, color="var(--coral)") %}<ul class="nice" style="--c:{{ color }}">{% for x in items %}<li>{% if x is mapping %}{% if x.year %}<b>{{ x.year }}</b> · {% endif %}{{ x.title }}{% if x.file %} — <a href="{{ u(x.file) }}" target="_blank">документ</a>{% endif %}{% if x.link %} — <a href="{{ x.link }}" target="_blank" rel="noopener">ссылка</a>{% endif %}{% else %}{{ x }}{% endif %}</li>{% endfor %}</ul>{% endmacro %}
 {% block main %}
 <div class="wrap section">
   <div class="profile card">
-    {% if a.photo %}<img class="avatar" src="{{ u(a.photo) }}" alt="{{ a.name }}">{% else %}<div class="avatar"><img src="{{ root }}assets/img/cloud.svg" alt="" style="width:90px"></div>{% endif %}
+    {% if a.photo %}<img class="avatar" src="{{ u(a.photo) }}" alt="{{ a.name }}" style="object-fit:cover">{% else %}<div class="avatar"><img src="{{ root }}assets/img/cloud.svg" alt="" style="width:90px"></div>{% endif %}
     <div><h1 style="margin:0">{{ a.name }}</h1><p class="muted" style="font-size:20px;margin:4px 0">{{ a.role }}</p>
-      <div class="prose">{{ a.body_html | safe }}</div></div>
+      {% if a.links %}<div class="btns" style="margin-top:10px">{% for l in a.links %}<a class="btn soft" href="{{ l.url }}" target="_blank" rel="noopener" style="font-size:15px;padding:8px 14px">{{ l.title }}</a>{% endfor %}</div>{% endif %}</div>
   </div>
 
-  {% if a.products %}<div class="section"><h2>Авторские пособия и игры</h2>
-    <div class="grid">{% for p in a.products %}<div class="card prod">
+  <div class="section">
+  <div class="tabs" data-tabs data-hash>
+    <button class="tab on" data-tab="about">Обо мне</button>
+    <button class="tab" data-tab="education">Образование</button>
+    <button class="tab" data-tab="science">Наука</button>
+    <button class="tab" data-tab="products">Пособия и игры</button>
+    {% if a.awards or a.diplomas %}<button class="tab" data-tab="awards">Награды и дипломы</button>{% endif %}
+  </div>
+
+  <div class="panel on" data-panel="about">
+    <div class="card prose">{{ a.body_html | safe }}</div>
+    {% if a.work %}<h2 style="margin-top:24px">Место работы</h2>{{ lst(a.work, "var(--sky)") }}{% endif %}
+  </div>
+
+  <div class="panel" data-panel="education">
+    <h2>Образование и обучение</h2>
+    {% if a.education %}{{ lst(a.education, "var(--mint)") }}{% else %}<div class="note">Раздел заполняется.</div>{% endif %}
+  </div>
+
+  <div class="panel" data-panel="science">
+    <h2>Научная работа</h2>
+    <div class="card"><p style="margin-top:0">Младший научный сотрудник лаборатории технологий и средств психолого-педагогической абилитации <a href="https://ikp-rao.ru/" target="_blank" rel="noopener">ФГБНУ «Институт коррекционной педагогики»</a>.</p>
+      {% if a.science_intro %}<p>{{ a.science_intro }}</p>{% endif %}
+      <div class="btns" style="margin-top:6px">{% for l in a.links or [] if 'ikp' in l.url or 'elibrary' in l.url %}<a class="btn main" href="{{ l.url }}" target="_blank" rel="noopener" style="font-size:15px;padding:8px 16px">{{ l.title }}</a>{% endfor %}</div></div>
+    {% if a.projects %}<h3 style="margin-top:24px">Проекты и экспертная работа</h3>{{ lst(a.projects, "var(--lav)") }}{% endif %}
+    {% if a.publications %}<h3 style="margin-top:24px">Научные статьи и публикации</h3>{{ lst(a.publications, "var(--sky)") }}{% endif %}
+    {% if a.talks %}<h3 style="margin-top:24px">Выступления</h3>{{ lst(a.talks, "var(--sun)") }}{% endif %}
+  </div>
+
+  <div class="panel" data-panel="products">
+    <h2>Авторские пособия и игры</h2>
+    <div class="grid">{% for p in a.products or [] %}<div class="card prod">
       {% if p.image %}<img src="{{ u(p.image) }}" alt="" style="border-radius:14px">{% endif %}
       <h3>{{ p.title }}</h3><div class="muted">{{ p.publisher }}</div>{% if p.isbn %}<div class="muted" style="font-size:14px">ISBN {{ p.isbn }}</div>{% endif %}
-      {% if p.link %}<a class="btn main" href="{{ p.link }}" target="_blank" rel="noopener">Где купить</a>{% endif %}
-    </div>{% endfor %}</div></div>{% endif %}
+      {% if p.link %}<a class="btn main" href="{{ p.link }}" target="_blank" rel="noopener" style="margin-top:10px">{{ 'Посмотреть на сайте Мерсибо' if 'mersibo' in p.link else 'Где купить' }}</a>{% endif %}
+    </div>{% endfor %}</div>
+  </div>
 
-  {% for key, title in [("education","Образование и обучение"),("diplomas","Дипломы и сертификаты"),("talks","Выступления и публикации"),("awards","Награды")] %}
-    {% if a[key] %}<div class="section"><h2>{{ title }}</h2><ul class="nice">
-      {% for x in a[key] %}<li>{% if x is mapping %}<b>{{ x.year }}</b> {{ x.title }}{% if x.file %} — <a href="{{ u(x.file) }}">документ</a>{% endif %}{% else %}{{ x }}{% endif %}</li>{% endfor %}
-    </ul></div>{% endif %}
-  {% endfor %}
+  {% if a.awards or a.diplomas %}<div class="panel" data-panel="awards">
+    {% if a.awards %}<h2>Награды и благодарности</h2>{{ lst(a.awards, "var(--sun)") }}{% endif %}
+    {% if a.diplomas %}<h2 style="margin-top:24px">Дипломы и сертификаты</h2>{{ lst(a.diplomas, "var(--mint)") }}{% endif %}
+  </div>{% endif %}
+  </div>
 </div>
 {% endblock %}

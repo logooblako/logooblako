@@ -71,23 +71,6 @@ class Maker:
             self.text(p, fitz.Rect(30, 100, 160, 130), "СТАРТ", 14, bold=True, color=CORAL)
             self.text(p, fitz.Rect(30, 712, 200, 740), "ФИНИШ", 14, bold=True, color=CORAL)
             files.append({"title": "Игра-дорожка", "file": self.save(doc, base + "-dorozhka.pdf")})
-        doc = self.new(); p = self.pg(doc, f"{s['title']}: слоги, фразы, чистоговорки", "Читает взрослый, ребёнок повторяет. Каждая строчка — 2–3 раза.")
-        y = 110
-        def block(title, lines, size=13):
-            nonlocal y, p
-            if not lines: return
-            need = 26 + len(lines) * (size + 9)
-            if y + need > H - 50: p = self.pg(doc, s["title"] + " (продолжение)"); y = 110
-            self.text(p, fitz.Rect(40, y, W - 40, y + 22), title, 15, bold=True, color=CORAL); y += 26
-            for ln in lines:
-                self.text(p, fitz.Rect(56, y, W - 40, y + size + 12), "• " + ln, size); y += size + 9
-            y += 8
-        block("Слоги", [l for l in (s.get("syllables") or "").split("\n") if l.strip()], 15)
-        block("Словосочетания", s.get("phrases") or [])
-        block("Предложения", s.get("sentences") or [])
-        block("Чистоговорки", s.get("chistogovorki") or [])
-        block("Скороговорки", s.get("skorogovorki") or [])
-        files.append({"title": "Слоги, фразы, чистоговорки", "file": self.save(doc, base + "-slogi.pdf")})
         return files
 
     # --- дифференциация
@@ -142,6 +125,8 @@ class Maker:
         block("Дома", l.get("home") or [])
         block("Куда сходить", l.get("places") or [])
         block("Сказки и книги", l.get("tales") or [])
+        block("Как читать сказки", l.get("tale_how") or [])
+        block("Какие вопросы задавать после сказки", l.get("tale_questions") or [])
         return [{"title": "Памятка (PDF)", "file": self.save(doc, f"files/urovni/uroven-{l['slug']}.pdf")}]
 
     # --- мелкая моторика: дорожки и линии для вырезания

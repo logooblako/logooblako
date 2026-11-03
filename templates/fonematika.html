@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Фонематический слух{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ f.title }}</h1>
+  <div class="card"><p style="margin:0">{{ f.intro }}</p></div>
+
+  <div class="section"><h2>Что ребёнок умеет в разном возрасте</h2>
+    <p class="muted">Ориентиры примерные: у каждого ребёнка свой темп. Если что-то настораживает, лучше показать ребёнка логопеду.</p>
+    <div class="steps">{% for n in f.norms or [] %}<div class="card step"><div class="num" style="width:auto;padding:0 12px;border-radius:999px;white-space:nowrap">{{ n.age }}</div><div>{{ n.text }}</div></div>{% endfor %}</div>
+  </div>
+
+  <div class="section"><h2>Этапы работы и игры</h2>
+    <p class="muted">Шесть этапов — от простого к сложному, как в программах Т. Б. Филичевой, Г. В. Чиркиной и Т. В. Тумановой. Переходите к следующему этапу, когда ребёнок легко справляется с играми текущего.</p>
+    <div>
+    <div class="tabs" data-tabs data-hash>{% for st in f.stages or [] %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="etap{{ loop.index }}">{{ loop.index }}. {{ st.title }}</button>{% endfor %}</div>
+    {% for st in f.stages or [] %}<div class="panel {{ 'on' if loop.first else '' }}" data-panel="etap{{ loop.index }}">
+      <div class="note" style="margin-bottom:14px"><b>Задача этапа:</b> {{ st.goal }}</div>
+      <div class="two">{% for g in st.games or [] %}<div class="card"><h3>{{ g.title }}</h3><p style="margin:0">{{ g.how }}</p></div>{% endfor %}</div>
+    </div>{% endfor %}
+    </div>
+  </div>
+
+  {% if files %}<div class="section"><h2>Скачать и распечатать</h2><div class="files">{% for x in files %}<a class="file" href="{{ u(x.file) }}" download><span class="pdf">PDF</span>{{ x.title }}</a>{% endfor %}</div></div>{% endif %}
+
+  <div class="section two">
+    <div><h2>Советы родителям</h2><ul class="nice" style="--c:var(--mint)">{% for x in f.tips or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+    <div><h2>Когда обратиться к специалисту</h2><ul class="nice">{% for x in f.alarm or [] %}<li>{{ x }}</li>{% endfor %}</ul></div>
+  </div>
+
+  {% if f.sources %}<div class="section"><h2>Литература</h2><ul class="nice" style="--c:var(--sun)">{% for x in f.sources %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+</div>
+{% endblock %}

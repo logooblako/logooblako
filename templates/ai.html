@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Сгенерировано ИИ{% endblock %}
+{% block main %}
+<div class="wrap section">
+  <h1>{{ intro.title }}</h1>
+  <div class="card prose">{{ intro.body_html | safe }}</div>
+  {% set kinds = ["Картинки для автоматизации", "Воздушная струя", "Дикция", "Другое"] %}
+  <div class="section">
+  <div class="tabs" data-tabs data-hash>
+    <button class="tab on" data-tab="all">Все</button>
+    {% for k in kinds %}<button class="tab" data-tab="k{{ loop.index }}">{{ k }}</button>{% endfor %}
+  </div>
+  {% for tab in ["all"] + range(1, kinds|length + 1) | list %}
+  <div class="panel {{ 'on' if tab == 'all' else '' }}" data-panel="{{ 'all' if tab == 'all' else 'k' ~ tab }}">
+    {% set sel = items if tab == 'all' else (items | selectattr("kind", "equalto", kinds[tab - 1]) | list) %}
+    {% for it in sel %}<div class="card" style="margin:14px 0">
+      <h2 style="margin-top:0">{{ it.title }}</h2>
+      <p>{% if it.kind %}<span class="tag new" style="margin-left:0">{{ it.kind }}</span>{% endif %}{% if it.sound %}<span class="tag">Звук {{ it.sound }}</span>{% endif %}{% if it.age %}<span class="tag">{{ it.age }}</span>{% endif %}</p>
+      {% if it.description %}<p class="muted">{{ it.description }}</p>{% endif %}
+      {% if it.images %}<div class="pics" style="margin:12px 0">{% for im in it.images %}<div class="pic" data-toggle><img src="{{ u(im.image) }}" alt="{{ im.word }}" loading="lazy"><b>{{ im.word }}</b></div>{% endfor %}</div>{% endif %}
+      <div class="prose">{{ it.body_html | safe }}</div>
+      {% if it.files %}<div class="files" style="margin-top:12px">{% for f in it.files %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">FILE</span>{{ f.title }}</a>{% endfor %}</div>{% endif %}
+    </div>{% else %}<p class="muted">Материалы этого раздела скоро появятся.</p>{% endfor %}
+  </div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

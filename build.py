@@ -3,7 +3,7 @@
 Запуск: python build.py   (нужны pyyaml, markdown, jinja2, pymupdf)"""
 import os, re, glob, json, shutil, yaml, markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-import worksheets
+import worksheets, cards
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "_site")
@@ -57,8 +57,22 @@ def main():
         groups[-1][1].append(s)
 
     pdf = worksheets.Maker(ROOT, OUT)
+    pics = {os.path.splitext(f)[0]: "/assets/pics/" + f for f in os.listdir(os.path.join(ROOT, "assets", "pics"))}
+    tr = dict(zip("абвгдеёжзийклмнопрстуфхцчшщъыьэюя", ["a","b","v","g","d","e","yo","zh","z","i","y","k","l","m","n","o","p","r","s","t","u","f","h","c","ch","sh","sch","","y","","e","yu","ya"]))
+    class PicMap(dict):
+        def get(self, w, d=""):
+            if w in self: return self[w]
+            return pics.get("".join(tr.get(c, c) for c in w.lower()).replace(" ", "-"), d)
+    picmap = PicMap()
+    for s in sounds:
+        for k in ("words_start", "words_middle", "words_end"):
+            for w in s.get(k) or []:
+                if w.get("pic"): picmap[w["word"].lower()] = w["pic"]
+    cm = cards.Cards(ROOT, OUT, picmap)
     for s in sounds:
         s["auto_files"] = pdf.sound(s)
+        s["cards"], s["cards_all"] = cm.sound(s, f"files/zvuki/{s['slug']}")
+        s["card"] = {c["key"]: c for c in s["cards"]}
         s["all_words"] = [w for k in ("words_start", "words_middle", "words_end") for w in (s.get(k) or []) if w.get("pic")]
     for d in diffs: d["auto_files"] = pdf.diff(d)
     for l in levels: l["auto_files"] = pdf.level(l)
@@ -69,6 +83,8 @@ def main():
     for s in sounds:
         render("sound.html", f"zvuki/{s['slug']}/index.html", nav="zvuki", s=s, groups=groups,
                game=json.dumps([{"w": w["word"], "p": w["pic"]} for w in s["all_words"]], ensure_ascii=False))
+    fon = load(os.path.join(ROOT, "content", "fonematika.md"))
+    render("fonematika.html", "fonematika/index.html", nav="fonematika", f=fon, files=cm.fonematika(fon, "files/fonematika/fonematika"))
     render("diffs_index.html", "differentsiatsiya/index.html", nav="diff", diffs=diffs)
     for d in diffs:
         g = [{"w": w["word"], "p": w["pic"], "h": "a"} for w in d.get("words_a") or [] if w.get("pic")] + \
@@ -103,8 +119,21 @@ def main():
     render("tales_index.html", "skazki/index.html", nav="skazki", tales=tales, intro=page("tales-intro"))
     for t in tales:
         render("tale.html", f"skazki/{t['slug']}/index.html", nav="skazki", t=t)
-    render("feedback.html", "otzyvy/index.html", nav="otzyvy")
+    reviews = sorted([r for r in coll("reviews") if r.get("published", True)], key=lambda r: str(r.get("date") or ""), reverse=True)
+    render("feedback.html", "otzyvy/index.html", nav="otzyvy", reviews=reviews)
+    ai = [x for x in coll("ai") if x.get("published", True)]
+    render("ai.html", "ii/index.html", nav="ii", items=ai, intro=page("ai-intro"))
     render("404.html", "404.html", nav="")
+    base = (site.get("site_url") or "").rstrip("/")
+    if base:
+        urls = []
+        for dp, dn, fn in os.walk(OUT):
+            for f in fn:
+                if f == "index.html":
+                    rel = os.path.relpath(os.path.join(dp, f), OUT).replace(os.sep, "/")
+                    urls.append(base + "/" + rel.replace("index.html", ""))
+        open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{x}</loc></url>\n" for x in sorted(urls)) + "</urlset>\n")
+        open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
     print("Готово:", OUT)
 
 if __name__ == "__main__":
