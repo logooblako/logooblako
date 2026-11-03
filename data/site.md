@@ -5,6 +5,8 @@ author: Юлдашева Анастасия Павловна
 email: ''
 site_url: 'https://logooblako.github.io/logooblako'
 feedback_post: ''
+google_verify: ''
+yandex_verify: ''
 footer_note: Материалы сайта не заменяют занятий со специалистом. Перед автоматизацией звука убедитесь, что логопед его поставил.
 messenger_note: 'С 10 февраля 2026 года Роскомнадзор ограничивает работу Telegram в России, поэтому ссылки на Telegram могут не открываться без дополнительных настроек.'
 auto_sources:

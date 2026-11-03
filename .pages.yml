@@ -37,6 +37,8 @@ content:
       - { name: site_url, label: "Адрес сайта (https://...)", type: string }
       - { name: feedback_post, label: "Пост Telegram для чата отзывов (имя_канала/номер_поста)", type: string }
       - { name: footer_note, label: Примечание в подвале, type: text }
+      - { name: google_verify, label: "Код подтверждения Google (meta-тег, только content)", type: string }
+      - { name: yandex_verify, label: "Код подтверждения Яндекса (meta-тег, только content)", type: string }
       - { name: messenger_note, label: "Предупреждение о Telegram в подвале", type: text }
       - { name: auto_sources, label: "Источники для страниц звуков", type: string, list: true }
 
