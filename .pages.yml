@@ -166,7 +166,7 @@ content:
       - { name: files, label: Файлы, component: file, list: true }
 
   - name: cognition
-    label: "🧸 Познание 0–3"
+    label: "🧸 Познание 0–11"
     type: collection
     path: content/cognition
     view: { primary: title }
@@ -394,4 +394,9 @@ content:
     fields:
       - { name: title, label: Заголовок, type: string }
       - { name: source, label: Источник (для раздела «Познание»), type: string }
+      - name: books
+        label: Книги для родителей (раздел «Познание»)
+        type: object
+        list: true
+        fields: [{ name: title, label: Название, type: string }, { name: author, label: Автор, type: string }, { name: note, label: О чём книга, type: text }]
       - { name: body, label: Текст, type: rich-text }
