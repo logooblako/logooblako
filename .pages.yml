@@ -313,7 +313,7 @@ content:
         list: true
         fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
       - name: talks
-        label: Выступления и публикации
+        label: "Наука: выступления"
         type: object
         list: true
         fields: [{ name: year, label: Год, type: string }, { name: title, label: Что, type: string }, { name: file, label: Документ, type: file, options: { media: files } }]
