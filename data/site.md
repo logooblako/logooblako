@@ -2,7 +2,7 @@
 site_name: Логооблако
 tagline: Логопедия для родителей — звуки, речь, игры
 author: Юлдашева Анастасия Павловна
-email: ''
+email: 'uld-ap@bk.ru'
 site_url: 'https://logooblako.github.io/logooblako'
 feedback_post: ''
 google_verify: ''
