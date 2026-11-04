@@ -7,6 +7,22 @@
   <h1>Различаем звуки {{ d.title }}</h1>
   <div class="card prose">{{ d.body_html | safe }}</div>
 
+  {% if d.compare %}<div class="section"><h2>{{ d.compare.title }}</h2>
+    <div class="card" style="overflow-x:auto;padding:0"><table class="cmp"><thead><tr><th></th><th>{{ d.compare.a }}</th><th>{{ d.compare.b }}</th></tr></thead>
+    <tbody>{% for r in d.compare.rows %}<tr><th>{{ r.sign }}</th><td>{{ r.a }}</td><td>{{ r.b }}</td></tr>{% endfor %}</tbody></table></div>
+  </div>{% endif %}
+
+  {% if d.stages %}<div class="section"><h2>Занятия по этапам</h2>
+    <p class="muted">Переходите к следующей вкладке, когда ребёнок уверенно справляется с предыдущей. Одно занятие — 10–15 минут, 2–3 игры.</p>
+    <div>
+    <div class="tabs" data-tabs data-hash>{% for st in d.stages %}<button class="tab {{ 'on' if loop.first else '' }}" data-tab="e{{ loop.index }}">{{ st.title }}</button>{% endfor %}</div>
+    {% for st in d.stages %}<div class="panel {{ 'on' if loop.first else '' }}" data-panel="e{{ loop.index }}">
+      {% if st.goal %}<div class="note" style="margin-bottom:14px">{{ st.goal }}</div>{% endif %}
+      <div class="two">{% for g in st.games or [] %}<div class="card"><h3>{{ g.title }}</h3><p style="margin:0">{{ g.how }}</p></div>{% endfor %}</div>
+    </div>{% endfor %}
+    </div>
+  </div>{% endif %}
+
   {% if game != '[]' %}
   <div class="section"><h2>Игра «Разложи по домикам»</h2>
     <div class="game" data-sortgame='{{ game }}' data-root="{{ root }}">
@@ -34,6 +50,14 @@
     {% if d.sentences %}<div><h2>Предложения</h2><ul class="nice">{% for x in d.sentences %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
     {% if d.skorogovorki %}<div><h2>Скороговорки</h2><ul class="nice" style="--c:var(--lav)">{% for x in d.skorogovorki %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
   </div>
+  <div class="section"><h2>Советы</h2><ul class="nice" style="--c:var(--sky)">
+    <li>Свяжите каждый звук с образом из таблицы и держите картинки-образы перед ребёнком на всех занятиях.</li>
+    <li>Сначала ребёнок только слушает и показывает. Не требуйте говорить, пока он не начнёт уверенно различать звуки на слух.</li>
+    <li>Если ребёнок ошибся, не повторяйте ошибку с укором: скажите слово правильно, чуть выделив звук голосом, и предложите повторить.</li>
+    <li>Работайте сначала с картинками, потом со словами без картинок, затем во фразах и в обычном разговоре.</li>
+    <li>Если смешение звуков сохраняется после 6 лет или мешает учиться читать и писать — обратитесь к логопеду.</li>
+  </ul></div>
+
   <div class="section"><h2>Скачать и распечатать</h2>
     <div class="files">{% for f in (d.auto_files or []) + (d.files or []) %}<a class="file" href="{{ u(f.file) }}" download><span class="pdf">PDF</span>{{ f.title }}</a>{% endfor %}</div>
   </div>
