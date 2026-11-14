@@ -46,6 +46,7 @@
     {% if d.word_pairs %}<div><h2>Слова-«близнецы»</h2><p class="muted">Отличаются одним звуком. Покажите картинку или назовите пару и спросите: «Это одно и то же?»</p>
       <ul class="nice">{% for x in d.word_pairs %}<li><b>{{ x.a }}</b> — <b>{{ x.b }}</b></li>{% endfor %}</ul></div>{% endif %}
   </div>
+  {% if d.phrases %}<div class="section"><h2>Словосочетания и короткие фразы с обоими звуками</h2><p>Назовите сочетание слов. Затем предложите ребёнку повторить его, если оба звука уже получаются правильно.</p><ul class="nice">{% for x in d.phrases %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
   <div class="section two">
     {% if d.sentences %}<div><h2>Предложения</h2><ul class="nice">{% for x in d.sentences %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
     {% if d.skorogovorki %}<div><h2>Скороговорки</h2><ul class="nice" style="--c:var(--lav)">{% for x in d.skorogovorki %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
